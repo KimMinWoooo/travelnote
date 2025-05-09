@@ -1,0 +1,34 @@
+security:
+  jwt:
+    token:
+      secret-key: test
+      expire-length: 3600000
+      algorithm: HS256
+
+cookie:
+  token-key: test
+  http-only: false
+  secure: false
+  domain: localhost
+  path: /
+  same-site: none
+  max-age: 7200 #2시간
+
+spring:
+  application:
+    name: member-service
+  datasource:
+    url: jdbc:h2:mem:memberdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka
+
+trip:
+  service:
+    url: http://trip-service:8080  # Kubernetes 서비스 이름 사용
+

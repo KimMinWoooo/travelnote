@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: traveler-service
+  datasource:
+    url: jdbc:h2:mem:travelerdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka
+
+member:
+  service:
+    url: http://member-service:8080  # Kubernetes 서비스 이름 사용

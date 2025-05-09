@@ -1,0 +1,71 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: travelnote-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "travelnote.example.com"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: member-vs
+spec:
+  hosts:
+  - "travelnote.example.com"
+  gateways:
+  - travelnote-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /api/members
+    route:
+    - destination:
+        host: member-service
+        port:
+          number: 8080
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: trip-vs
+spec:
+  hosts:
+  - "travelnote.example.com"
+  gateways:
+  - travelnote-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /api/trips
+    route:
+    - destination:
+        host: trip-service
+        port:
+          number: 8080
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: traveler-vs
+spec:
+  hosts:
+  - "travelnote.example.com"
+  gateways:
+  - travelnote-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /api/travelers
+    route:
+    - destination:
+        host: traveler-service
+        port:
+          number: 8080 

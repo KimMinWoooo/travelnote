@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: traveler-service
+  labels:
+    app: traveler-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: traveler-service
+  template:
+    metadata:
+      labels:
+        app: traveler-service
+    spec:
+      containers:
+      - name: traveler-service
+        image: travelnote/traveler-service:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "prod"
+        - name: SPRING_DATASOURCE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: traveler-config
+              key: database.url
+        - name: SPRING_DATASOURCE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: traveler-secrets
+              key: database.username
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: traveler-secrets
+              key: database.password
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traveler-service
+spec:
+  selector:
+    app: traveler-service
+  ports:
+  - port: 8080
+    targetPort: 8080
+  type: ClusterIP 

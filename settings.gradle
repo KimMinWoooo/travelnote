@@ -1,0 +1,6 @@
+rootProject.name = 'TravelNote'
+include 'member'
+include 'trip'
+include 'traveler'
+include 'common-library'
+
